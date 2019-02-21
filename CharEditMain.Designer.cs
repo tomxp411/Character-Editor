@@ -1,4 +1,4 @@
-﻿namespace Nu64.CharEdit
+﻿namespace CharEdit
 {
     partial class CharEditMain
     {
@@ -30,13 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.charViewer1 = new CharSet.CharViewer();
+            this.charViewer1 = new CharEdit.CharViewer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ConvertButton = new System.Windows.Forms.Button();
+            this.ConvertCharHeight = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.CharHeight = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.editControl1 = new Nu64.CharEdit.EditControl();
+            this.editControl1 = new CharEdit.EditControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,9 +50,6 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label3 = new System.Windows.Forms.Label();
-            this.ConvertCharHeight = new System.Windows.Forms.ComboBox();
-            this.ConvertButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -101,6 +101,42 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(518, 21);
             this.panel1.TabIndex = 1;
+            // 
+            // ConvertButton
+            // 
+            this.ConvertButton.Location = new System.Drawing.Point(373, 0);
+            this.ConvertButton.Name = "ConvertButton";
+            this.ConvertButton.Size = new System.Drawing.Size(54, 23);
+            this.ConvertButton.TabIndex = 6;
+            this.ConvertButton.Text = "Convert";
+            this.ConvertButton.UseVisualStyleBackColor = true;
+            this.ConvertButton.Click += new System.EventHandler(this.ConvertButton_Click);
+            // 
+            // ConvertCharHeight
+            // 
+            this.ConvertCharHeight.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ConvertCharHeight.FormattingEnabled = true;
+            this.ConvertCharHeight.Items.AddRange(new object[] {
+            "8",
+            "10",
+            "12",
+            "14",
+            "16"});
+            this.ConvertCharHeight.Location = new System.Drawing.Point(315, 0);
+            this.ConvertCharHeight.Name = "ConvertCharHeight";
+            this.ConvertCharHeight.Size = new System.Drawing.Size(52, 21);
+            this.ConvertCharHeight.TabIndex = 5;
+            this.ConvertCharHeight.Text = "8";
+            // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label3.Location = new System.Drawing.Point(251, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 21);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Convert";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // CharHeight
             // 
@@ -198,6 +234,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -227,42 +264,6 @@
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.clearToolStripMenuItem.Text = "Cl&ear Block";
             // 
-            // label3
-            // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label3.Location = new System.Drawing.Point(251, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 21);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Convert";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // ConvertCharHeight
-            // 
-            this.ConvertCharHeight.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ConvertCharHeight.FormattingEnabled = true;
-            this.ConvertCharHeight.Items.AddRange(new object[] {
-            "8",
-            "10",
-            "12",
-            "14",
-            "16"});
-            this.ConvertCharHeight.Location = new System.Drawing.Point(315, 0);
-            this.ConvertCharHeight.Name = "ConvertCharHeight";
-            this.ConvertCharHeight.Size = new System.Drawing.Size(52, 21);
-            this.ConvertCharHeight.TabIndex = 5;
-            this.ConvertCharHeight.Text = "8";
-            // 
-            // ConvertButton
-            // 
-            this.ConvertButton.Location = new System.Drawing.Point(373, 0);
-            this.ConvertButton.Name = "ConvertButton";
-            this.ConvertButton.Size = new System.Drawing.Size(54, 23);
-            this.ConvertButton.TabIndex = 6;
-            this.ConvertButton.Text = "Convert";
-            this.ConvertButton.UseVisualStyleBackColor = true;
-            this.ConvertButton.Click += new System.EventHandler(this.ConvertButton_Click);
-            // 
             // CharEditMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -290,7 +291,7 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private CharSet.CharViewer charViewer1;
+        private global::CharEdit.CharViewer charViewer1;
         private EditControl editControl1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;

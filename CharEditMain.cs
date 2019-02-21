@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Nu64.CharEdit
+namespace CharEdit
 {
     public partial class CharEditMain : Form
     {
@@ -47,7 +47,10 @@ namespace Nu64.CharEdit
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog f = new OpenFileDialog();
-            f.Filter = "ROM BIN file|*.bin|PNG Image|*.png|BMP Image|*.bmp|All Files|*.*";
+            //For now, only load BIN files.
+            //f.Filter = "ROM BIN file|*.bin|PNG Image|*.png|BMP Image|*.bmp|All Files|*.*";
+            f.Filter = "ROM BIN file|*.bin|All Files|*.*";
+
             if (f.ShowDialog() == DialogResult.OK)
             {
                 string ext = System.IO.Path.GetExtension(f.FileName).ToLower();
@@ -58,7 +61,8 @@ namespace Nu64.CharEdit
                         break;
                     case ".png":
                     case ".bmp":
-                        charViewer1.FontData = charViewer1.LoadPNG(f.FileName);
+                    default:
+                        MessageBox.Show("File type not supported.");
                         break;
                 }
                 charViewer1.Refresh();
@@ -101,9 +105,14 @@ namespace Nu64.CharEdit
             if (!int.TryParse(ConvertCharHeight.Text, out to))
                 return;
 
-            charViewer1.ConvertHeight(from, to);
+            //charViewer1.ConvertHeight(from, to);
 
             CharHeight.Text = ConvertCharHeight.Text;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

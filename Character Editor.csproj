@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{372968C7-3555-4B1D-B4C2-8374FD45F6B5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Nu64.CharEdit</RootNamespace>
+    <RootNamespace>CharEdit</RootNamespace>
     <AssemblyName>Character Editor</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Font8bit.cs" />
+    <Compile Include="FontCell.cs" />
     <Compile Include="CharEditMain.cs">
       <SubType>Form</SubType>
     </Compile>

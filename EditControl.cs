@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Nu64.CharEdit
+namespace CharEdit
 {
     public partial class EditControl : UserControl
     {
@@ -17,12 +17,12 @@ namespace Nu64.CharEdit
 
         byte[] reloadData = null;
         byte[] clipData = null;
-        byte[] FontData = new byte[BytesPerCharacter_Max * 256];
+        Font8bit FontData = null;
         byte[] characterData = new byte[16];
         bool[,] grid = new bool[BitsPerRow_Max, BytesPerCharacter_Max];
         bool[] guides = new bool[BytesPerCharacter_Max];
 
-        int CharIndex = 0;
+        int SelectedCharacter = 0;
         int Columns = BitsPerRow_Max;
         int Rows = BytesPerCharacter_Max;
         Color Color0 = Color.Black;
@@ -51,10 +51,10 @@ namespace Nu64.CharEdit
             InitializeComponent();
         }
 
-        internal void LoadCharacter(byte[] FontData, int selectedIndex, int bytesPerCharacter)
+        internal void LoadCharacter(Font8bit font, int selectedIndex, int bytesPerCharacter)
         {
-            this.FontData = FontData;
-            this.CharIndex = selectedIndex;
+            this.FontData = font;
+            this.SelectedCharacter = selectedIndex;
             Rows = bytesPerCharacter;
 
             LoadCharacter();
@@ -62,16 +62,21 @@ namespace Nu64.CharEdit
 
         private void LoadCharacter()
         {
+            if (FontData == null)
+                return;
+
             characterData = new byte[Rows];
             grid = new bool[Columns, Rows];
 
-            int pos = CharIndex * Rows;
-            if (pos < 0 || pos >= FontData.Length)
+            int pos = SelectedCharacter;
+            if (pos < 0 || pos >= FontData.Count)
                 return;
-            for (int i = 0; i < Rows; i++)
-            {
-                characterData[i] = FontData[pos + i];
-            }
+
+            Array.Copy(FontData[SelectedCharacter].Data, characterData, FontData.BytesPerCharacter);
+            //for (int i = 0; i < Rows; i++)
+            //{
+            //    characterData[i] = FontData[SelectedCharacter].Data[i];
+            //}
             reloadData = new byte[Rows];
             characterData.CopyTo(reloadData, 0);
 
@@ -176,10 +181,9 @@ namespace Nu64.CharEdit
         {
             SavePixels();
 
-            int j = CharIndex * Rows;
             for (int i = 0; i < Rows; i++)
             {
-                FontData[j + i] = characterData[i];
+                FontData[SelectedCharacter].Data[i] = characterData[i];
             }
 
             CharacterSaved?.Invoke(this, new EventArgs());

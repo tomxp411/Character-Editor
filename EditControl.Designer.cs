@@ -1,4 +1,4 @@
-﻿namespace Nu64.CharEdit
+﻿namespace CharEdit
 {
     partial class EditControl
     {
