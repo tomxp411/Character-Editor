@@ -47,6 +47,9 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label3 = new System.Windows.Forms.Label();
+            this.ConvertCharHeight = new System.Windows.Forms.ComboBox();
+            this.ConvertButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -86,6 +89,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.ConvertButton);
+            this.panel1.Controls.Add(this.ConvertCharHeight);
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.CharHeight);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.textBox1);
@@ -108,7 +114,7 @@
             "16"});
             this.CharHeight.Location = new System.Drawing.Point(199, 0);
             this.CharHeight.Name = "CharHeight";
-            this.CharHeight.Size = new System.Drawing.Size(121, 21);
+            this.CharHeight.Size = new System.Drawing.Size(52, 21);
             this.CharHeight.TabIndex = 3;
             this.CharHeight.Text = "8";
             this.CharHeight.SelectedIndexChanged += new System.EventHandler(this.CharHeight_SelectedIndexChanged);
@@ -221,6 +227,42 @@
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.clearToolStripMenuItem.Text = "Cl&ear Block";
             // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label3.Location = new System.Drawing.Point(251, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 21);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Convert";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ConvertCharHeight
+            // 
+            this.ConvertCharHeight.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ConvertCharHeight.FormattingEnabled = true;
+            this.ConvertCharHeight.Items.AddRange(new object[] {
+            "8",
+            "10",
+            "12",
+            "14",
+            "16"});
+            this.ConvertCharHeight.Location = new System.Drawing.Point(315, 0);
+            this.ConvertCharHeight.Name = "ConvertCharHeight";
+            this.ConvertCharHeight.Size = new System.Drawing.Size(52, 21);
+            this.ConvertCharHeight.TabIndex = 5;
+            this.ConvertCharHeight.Text = "8";
+            // 
+            // ConvertButton
+            // 
+            this.ConvertButton.Location = new System.Drawing.Point(373, 0);
+            this.ConvertButton.Name = "ConvertButton";
+            this.ConvertButton.Size = new System.Drawing.Size(54, 23);
+            this.ConvertButton.TabIndex = 6;
+            this.ConvertButton.Text = "Convert";
+            this.ConvertButton.UseVisualStyleBackColor = true;
+            this.ConvertButton.Click += new System.EventHandler(this.ConvertButton_Click);
+            // 
             // CharEditMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -265,5 +307,8 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox CharHeight;
+        private System.Windows.Forms.Button ConvertButton;
+        private System.Windows.Forms.ComboBox ConvertCharHeight;
+        private System.Windows.Forms.Label label3;
     }
 }

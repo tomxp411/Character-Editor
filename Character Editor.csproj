@@ -70,10 +70,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="CBM-ASCII_8x16.bin">
+    <None Include="PET-ASCII_8x16.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CBM-ASCII_8x8.bin">
+    <None Include="PET-ASCII_8x8.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

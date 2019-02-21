@@ -12,7 +12,7 @@ namespace CharSet
 {
     public partial class CharViewer : UserControl
     {
-        int CHARSET_SIZE = 4096;
+        int CHARSET_COUNT = 256;
 
         Brush textBrush = null;  //new SolidBrush(SystemColors.WindowText);
         Brush selectedBrush = null;
@@ -41,9 +41,17 @@ namespace CharSet
             InitializeComponent();
         }
 
-        public byte[] FontData = new byte[8 * 256];
+        public byte[] FontData = new byte[4096];
 
         public MouseButtons MouseButton { get; private set; }
+
+        int CHARSET_SIZE
+        {
+            get
+            {
+                return CHARSET_COUNT * BitsPerRow;
+            }
+        }
 
         public int BytesPerCharacter
         {
@@ -118,8 +126,32 @@ namespace CharSet
         // useful for converting BIN to PNG or PNG to BIN
         public void CopyAll()
         {
-            CopyBlock(FontData, 0, 0, 256);
+            CopyBlock(FontData, 0, 0, CHARSET_COUNT);
             Refresh();
+        }
+
+        /// <summary>
+        /// converts a character set to the new height. Extra rows are added to or truncated
+        /// from the bottom. 
+        /// </summary>
+        /// <param name="OldHeight"></param>
+        /// <param name="NewHeight"></param>
+        internal void ConvertHeight(int OldHeight, int NewHeight)
+        {
+            byte[] newData = new byte[NewHeight * CHARSET_COUNT];
+            for (int c = 0; c < CHARSET_COUNT; c++)
+            {
+                for (int row = 0; row < OldHeight && row < NewHeight; row++)
+                {
+                    int nr = c * NewHeight + row;
+                    int or = c * OldHeight + row;
+
+                    newData[nr] = FontData[or];
+                }
+            }
+
+            FontData = newData;
+            BytesPerCharacter = NewHeight;
         }
 
         public void CopyNonPET()

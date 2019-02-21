@@ -90,5 +90,20 @@ namespace Nu64.CharEdit
                 editControl1.BytesPerCharacter = h;
             }
         }
+
+        private void ConvertButton_Click(object sender, EventArgs e)
+        {
+            int from;
+            int to;
+
+            if (!int.TryParse(CharHeight.Text, out from))
+                return;
+            if (!int.TryParse(ConvertCharHeight.Text, out to))
+                return;
+
+            charViewer1.ConvertHeight(from, to);
+
+            CharHeight.Text = ConvertCharHeight.Text;
+        }
     }
 }
