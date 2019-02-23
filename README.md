@@ -20,6 +20,10 @@ Click that to turn on guides in taht row of the character cell editor. Use this 
 ## License
 License is GPL3. Copyright is Tom P. Wilson. 
 
+I am developing a custom 8x8 font in conjunction with this product. The font files are free for any use, with
+attribution. Please link back to this GitHub repository. I would love to see everyone in the retro community
+use the hybrid PET-ASCII font as their official font for 8 and 16 bit retro computers.
+
 I'd love a heads-up when forking this or using it in your project. 
 wilsontp (at) gmail.com
 
