@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Font8bit.cs" />
+    <Compile Include="FontBank.cs" />
     <Compile Include="FontCell.cs" />
     <Compile Include="CharEditMain.cs">
       <SubType>Form</SubType>

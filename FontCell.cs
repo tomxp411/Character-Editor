@@ -10,5 +10,6 @@ namespace CharEdit
     {
         public const int CharacterSize_Max = 16;
         public byte[] Data = new byte[CharacterSize_Max];
+
     }
 }

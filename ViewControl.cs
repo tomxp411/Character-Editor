@@ -41,7 +41,7 @@ namespace CharEdit
             InitializeComponent();
         }
 
-        public Font8bit FontData = new Font8bit();
+        public Font8bit FontData = new Font8bit(1,256);
 
         public MouseButtons MouseButton { get; private set; }
 
@@ -67,43 +67,60 @@ namespace CharEdit
             }
         }
 
-        public Font8bit LoadBin(string Filename)
+        public Font8bit LoadBin(string Filename, int BytesPerCharacter)
         {
             if (!System.IO.File.Exists(Filename))
                 return null;
 
-            byte[] data = new byte[CHARSET_SIZE];
-            data = System.IO.File.ReadAllBytes(Filename);
+            byte[] data = System.IO.File.ReadAllBytes(Filename);
 
-            Font8bit font = new Font8bit();
+            int cells = data.Length / BytesPerCharacter;
+            int banks = cells / FontBank.Max;
+
+            Font8bit font = new Font8bit(banks, FontBank.Max);
+            this.BytesPerCharacter = BytesPerCharacter;
             font.BytesPerCharacter = BytesPerCharacter;
 
+            int b = 0;
+            int bankid = 0;
+            int charid = 0;
             int i = 0;
-            for (int c = 0; c < font.Count; c++)
+            while(b < data.Length)
             {
-                FontCell cell = font[c];
-                for (int row = 0; row < BytesPerCharacter; row++)
+                while (charid < font.CurrentBank.Count)
                 {
-                    cell.Data[row] = data[i];
+                    FontCell cell = font[bankid, charid];
+                    //System.Diagnostics.Debug.Write(i);
+                    //System.Diagnostics.Debug.Write(" : ");
+                    for (int row = 0; row < BytesPerCharacter; row++)
+                    {
+                        //System.Diagnostics.Debug.Write(data[b].ToString("x2"));
+                        //System.Diagnostics.Debug.Write(" ");
+                        cell.Data[row] = data[b++];
+                    }
+                    charid++;
+                    //System.Diagnostics.Debug.WriteLine("");
                     i++;
                 }
-                if (i >= data.Length)
-                    break;
+                charid = 0;
+                bankid++;
             }
-
             return font;
         }
 
         public void SaveBin(string Filename, Font8bit font)
         {
-            byte[] data = new byte[font.Count * font.BytesPerCharacter];
+            byte[] data = new byte[font.TotalBytes];
             int i = 0;
-            for (int c = 0; c < font.Count; c++)
+            for (int b = 0; b < font.Banks.Count; b++)
             {
-                for (int row = 0; row < font.BytesPerCharacter; row++)
+                for (int c = 0; c < font.Banks[b].Count; c++)
                 {
-                    data[i] = font[c].Data[row];
-                    i++;
+                    for (int row = 0; row < font.BytesPerCharacter; row++)
+                    {
+                        data[i] = font[c].Data[row];
+                        i++;
+                    }
                 }
             }
             System.IO.File.WriteAllBytes(Filename, data);
@@ -222,7 +239,7 @@ namespace CharEdit
 
         internal void Clear()
         {
-            FontData = new Font8bit(); // new byte[CHARSET_SIZE];
+            FontData = new Font8bit(1,256); // new byte[CHARSET_SIZE];
             Refresh();
         }
 
@@ -238,7 +255,7 @@ namespace CharEdit
                 pen = new Pen(Color.Gray);
             }
 
-            int characters = font.Count;
+            int characters = font.CurrentBank.Count;
             int x0 = StartX;
             int x = x0;
             int y0 = StartY;

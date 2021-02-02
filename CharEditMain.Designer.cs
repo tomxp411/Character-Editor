@@ -32,6 +32,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.charViewer1 = new CharEdit.CharViewer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bankSelect = new System.Windows.Forms.ComboBox();
+            this.BankLabel = new System.Windows.Forms.Label();
             this.ConvertButton = new System.Windows.Forms.Button();
             this.ConvertCharHeight = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -89,6 +91,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.bankSelect);
+            this.panel1.Controls.Add(this.BankLabel);
             this.panel1.Controls.Add(this.ConvertButton);
             this.panel1.Controls.Add(this.ConvertCharHeight);
             this.panel1.Controls.Add(this.label3);
@@ -102,13 +106,40 @@
             this.panel1.Size = new System.Drawing.Size(518, 21);
             this.panel1.TabIndex = 1;
             // 
+            // bankSelect
+            // 
+            this.bankSelect.Dock = System.Windows.Forms.DockStyle.Left;
+            this.bankSelect.FormattingEnabled = true;
+            this.bankSelect.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3"});
+            this.bankSelect.Location = new System.Drawing.Point(429, 0);
+            this.bankSelect.Name = "bankSelect";
+            this.bankSelect.Size = new System.Drawing.Size(52, 21);
+            this.bankSelect.TabIndex = 8;
+            this.bankSelect.Text = "0";
+            this.bankSelect.SelectedIndexChanged += new System.EventHandler(this.bankSelect_SelectedIndexChanged);
+            // 
+            // BankLabel
+            // 
+            this.BankLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.BankLabel.Location = new System.Drawing.Point(376, 0);
+            this.BankLabel.Name = "BankLabel";
+            this.BankLabel.Size = new System.Drawing.Size(53, 21);
+            this.BankLabel.TabIndex = 7;
+            this.BankLabel.Text = "Bank";
+            this.BankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ConvertButton
             // 
-            this.ConvertButton.Location = new System.Drawing.Point(373, 0);
+            this.ConvertButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ConvertButton.Location = new System.Drawing.Point(342, 0);
             this.ConvertButton.Name = "ConvertButton";
-            this.ConvertButton.Size = new System.Drawing.Size(54, 23);
+            this.ConvertButton.Size = new System.Drawing.Size(34, 21);
             this.ConvertButton.TabIndex = 6;
-            this.ConvertButton.Text = "Convert";
+            this.ConvertButton.Text = "Go";
             this.ConvertButton.UseVisualStyleBackColor = true;
             this.ConvertButton.Click += new System.EventHandler(this.ConvertButton_Click);
             // 
@@ -122,7 +153,7 @@
             "12",
             "14",
             "16"});
-            this.ConvertCharHeight.Location = new System.Drawing.Point(315, 0);
+            this.ConvertCharHeight.Location = new System.Drawing.Point(290, 0);
             this.ConvertCharHeight.Name = "ConvertCharHeight";
             this.ConvertCharHeight.Size = new System.Drawing.Size(52, 21);
             this.ConvertCharHeight.TabIndex = 5;
@@ -131,9 +162,9 @@
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label3.Location = new System.Drawing.Point(251, 0);
+            this.label3.Location = new System.Drawing.Point(232, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 21);
+            this.label3.Size = new System.Drawing.Size(58, 21);
             this.label3.TabIndex = 4;
             this.label3.Text = "Convert";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -148,7 +179,7 @@
             "12",
             "14",
             "16"});
-            this.CharHeight.Location = new System.Drawing.Point(199, 0);
+            this.CharHeight.Location = new System.Drawing.Point(180, 0);
             this.CharHeight.Name = "CharHeight";
             this.CharHeight.Size = new System.Drawing.Size(52, 21);
             this.CharHeight.TabIndex = 3;
@@ -160,7 +191,7 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Left;
             this.label2.Location = new System.Drawing.Point(135, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 21);
+            this.label2.Size = new System.Drawing.Size(45, 21);
             this.label2.TabIndex = 2;
             this.label2.Text = "Height";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -218,21 +249,21 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -311,5 +342,7 @@
         private System.Windows.Forms.Button ConvertButton;
         private System.Windows.Forms.ComboBox ConvertCharHeight;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox bankSelect;
+        private System.Windows.Forms.Label BankLabel;
     }
 }

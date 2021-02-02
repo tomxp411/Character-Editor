@@ -22,9 +22,11 @@ namespace CharEdit
         bool[,] grid = new bool[BitsPerRow_Max, BytesPerCharacter_Max];
         bool[] guides = new bool[BytesPerCharacter_Max];
 
-        int SelectedCharacter = 0;
+        //int SelectedCharacter = 0;
         int Columns = BitsPerRow_Max;
         int Rows = BytesPerCharacter_Max;
+        int Banks = 1;
+
         Color Color0 = Color.Black;
         Color Color1 = Color.LightGreen;
         MouseButtons MouseHeld = MouseButtons.None;
@@ -54,8 +56,9 @@ namespace CharEdit
         internal void LoadCharacter(Font8bit font, int selectedIndex, int bytesPerCharacter)
         {
             this.FontData = font;
-            this.SelectedCharacter = selectedIndex;
+            FontData.SelectedCharacter = selectedIndex;
             Rows = bytesPerCharacter;
+            Banks = font.Banks.Count;
 
             LoadCharacter();
         }
@@ -68,11 +71,11 @@ namespace CharEdit
             characterData = new byte[Rows];
             grid = new bool[Columns, Rows];
 
-            int pos = SelectedCharacter;
-            if (pos < 0 || pos >= FontData.Count)
+            int pos = SelectedIndex;
+            if (pos < 0 || pos >= FontData.CurrentFont.Count)
                 return;
 
-            Array.Copy(FontData[SelectedCharacter].Data, characterData, FontData.BytesPerCharacter);
+            Array.Copy(FontData[SelectedIndex].Data, characterData, FontData.BytesPerCharacter);
             //for (int i = 0; i < Rows; i++)
             //{
             //    characterData[i] = FontData[SelectedCharacter].Data[i];
@@ -183,7 +186,7 @@ namespace CharEdit
 
             for (int i = 0; i < Rows; i++)
             {
-                FontData[SelectedCharacter].Data[i] = characterData[i];
+                FontData[SelectedIndex].Data[i] = characterData[i];
             }
 
             CharacterSaved?.Invoke(this, new EventArgs());
@@ -360,5 +363,21 @@ namespace CharEdit
                 }
             }
         }
+
+        public int SelectedIndex
+        {
+            get
+            {
+                return FontData.SelectedCharacter;
+            }
+            set
+            {
+                if (value >= 0 && value < FontData.CurrentFont.Count)
+                {
+                    FontData.SelectedCharacter = value;
+                }
+            }
+        }
+
     }
 }

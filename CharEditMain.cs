@@ -12,6 +12,22 @@ namespace CharEdit
 {
     public partial class CharEditMain : Form
     {
+        int m_BytesPerCharacter = 8;
+
+        public int BytesPerCharacter
+        {
+            get
+            {
+                return this.m_BytesPerCharacter;
+            }
+
+            set
+            {
+                this.m_BytesPerCharacter = value;
+                charViewer1.BytesPerCharacter = value;
+                editControl1.BytesPerCharacter = value;
+            }
+        }
 
         public CharEditMain()
         {
@@ -57,7 +73,7 @@ namespace CharEdit
                 switch (ext)
                 {
                     case ".bin":
-                        charViewer1.FontData = charViewer1.LoadBin(f.FileName);
+                        charViewer1.FontData = charViewer1.LoadBin(f.FileName, BytesPerCharacter);
                         break;
                     case ".png":
                     case ".bmp":
@@ -66,6 +82,17 @@ namespace CharEdit
                         break;
                 }
                 charViewer1.Refresh();
+                editControl1.Enabled = true;
+                RefreshBankSelect();
+            }
+        }
+
+        private void RefreshBankSelect()
+        {
+            bankSelect.Items.Clear();
+            for(int i=0; i<charViewer1.FontData.Banks.Count; i++)
+            {
+                bankSelect.Items.Add(i.ToString());
             }
         }
 
@@ -90,8 +117,7 @@ namespace CharEdit
             int h;
             if(int.TryParse(CharHeight.Text, out h))
             {
-                charViewer1.BytesPerCharacter = h;
-                editControl1.BytesPerCharacter = h;
+                this.BytesPerCharacter = h;
             }
         }
 
@@ -113,6 +139,14 @@ namespace CharEdit
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void bankSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int b = charViewer1.FontData.SelectedBank;
+            int.TryParse(bankSelect.Text, out b);
+            charViewer1.FontData.SelectedBank = b;
+            charViewer1.Refresh();
         }
     }
 }
