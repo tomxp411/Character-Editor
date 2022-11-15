@@ -1,4 +1,4 @@
-﻿namespace CharEdit
+﻿namespace Nu64.CharEdit
 {
     partial class EditControl
     {
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.characterBox = new System.Windows.Forms.PictureBox();
+            this.characterPanel = new System.Windows.Forms.PictureBox();
             this.SaveButton = new System.Windows.Forms.Button();
             this.RightButton = new System.Windows.Forms.Button();
             this.DownButton = new System.Windows.Forms.Button();
@@ -38,28 +38,24 @@
             this.CopyButton = new System.Windows.Forms.Button();
             this.PasteButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
-            this.guideBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.characterBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.guideBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // characterBox
+            // characterPanel
             // 
-            this.characterBox.BackColor = System.Drawing.Color.Black;
-            this.characterBox.ForeColor = System.Drawing.Color.LightGreen;
-            this.characterBox.Location = new System.Drawing.Point(9, 4);
-            this.characterBox.Name = "characterBox";
-            this.characterBox.Size = new System.Drawing.Size(256, 256);
-            this.characterBox.TabIndex = 0;
-            this.characterBox.TabStop = false;
-            this.characterBox.Paint += new System.Windows.Forms.PaintEventHandler(this.P_Paint);
-            this.characterBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.P_MouseDown);
-            this.characterBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.P_MouseMove);
-            this.characterBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.P_MouseUp);
+            this.characterPanel.BackColor = System.Drawing.Color.Black;
+            this.characterPanel.ForeColor = System.Drawing.Color.LightGreen;
+            this.characterPanel.Location = new System.Drawing.Point(4, 4);
+            this.characterPanel.Name = "characterPanel";
+            this.characterPanel.Size = new System.Drawing.Size(256, 256);
+            this.characterPanel.TabIndex = 0;
+            this.characterPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.characterPanel_Paint);
+            this.characterPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.P_MouseDown);
+            this.characterPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.P_MouseMove);
+            this.characterPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.P_MouseUp);
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(307, 237);
+            this.SaveButton.Location = new System.Drawing.Point(267, 237);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(75, 23);
             this.SaveButton.TabIndex = 0;
@@ -69,7 +65,7 @@
             // 
             // RightButton
             // 
-            this.RightButton.Location = new System.Drawing.Point(388, 33);
+            this.RightButton.Location = new System.Drawing.Point(348, 33);
             this.RightButton.Name = "RightButton";
             this.RightButton.Size = new System.Drawing.Size(75, 23);
             this.RightButton.TabIndex = 1;
@@ -79,7 +75,7 @@
             // 
             // DownButton
             // 
-            this.DownButton.Location = new System.Drawing.Point(348, 62);
+            this.DownButton.Location = new System.Drawing.Point(308, 62);
             this.DownButton.Name = "DownButton";
             this.DownButton.Size = new System.Drawing.Size(75, 23);
             this.DownButton.TabIndex = 2;
@@ -89,7 +85,7 @@
             // 
             // UpButton
             // 
-            this.UpButton.Location = new System.Drawing.Point(348, 4);
+            this.UpButton.Location = new System.Drawing.Point(308, 4);
             this.UpButton.Name = "UpButton";
             this.UpButton.Size = new System.Drawing.Size(75, 23);
             this.UpButton.TabIndex = 3;
@@ -99,7 +95,7 @@
             // 
             // LeftButton
             // 
-            this.LeftButton.Location = new System.Drawing.Point(307, 33);
+            this.LeftButton.Location = new System.Drawing.Point(267, 33);
             this.LeftButton.Name = "LeftButton";
             this.LeftButton.Size = new System.Drawing.Size(75, 23);
             this.LeftButton.TabIndex = 4;
@@ -109,7 +105,7 @@
             // 
             // ReloadButton
             // 
-            this.ReloadButton.Location = new System.Drawing.Point(388, 237);
+            this.ReloadButton.Location = new System.Drawing.Point(348, 237);
             this.ReloadButton.Name = "ReloadButton";
             this.ReloadButton.Size = new System.Drawing.Size(75, 23);
             this.ReloadButton.TabIndex = 5;
@@ -119,7 +115,7 @@
             // 
             // CopyButton
             // 
-            this.CopyButton.Location = new System.Drawing.Point(307, 208);
+            this.CopyButton.Location = new System.Drawing.Point(267, 208);
             this.CopyButton.Name = "CopyButton";
             this.CopyButton.Size = new System.Drawing.Size(75, 23);
             this.CopyButton.TabIndex = 6;
@@ -129,7 +125,7 @@
             // 
             // PasteButton
             // 
-            this.PasteButton.Location = new System.Drawing.Point(388, 208);
+            this.PasteButton.Location = new System.Drawing.Point(348, 208);
             this.PasteButton.Name = "PasteButton";
             this.PasteButton.Size = new System.Drawing.Size(75, 23);
             this.PasteButton.TabIndex = 7;
@@ -139,7 +135,7 @@
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(307, 179);
+            this.ClearButton.Location = new System.Drawing.Point(267, 179);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(75, 23);
             this.ClearButton.TabIndex = 8;
@@ -147,22 +143,10 @@
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
-            // guideBox
-            // 
-            this.guideBox.BackColor = System.Drawing.Color.Black;
-            this.guideBox.Location = new System.Drawing.Point(271, 4);
-            this.guideBox.Name = "guideBox";
-            this.guideBox.Size = new System.Drawing.Size(16, 256);
-            this.guideBox.TabIndex = 9;
-            this.guideBox.TabStop = false;
-            this.guideBox.Paint += new System.Windows.Forms.PaintEventHandler(this.guideBox_Paint);
-            this.guideBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GuideBox_MouseDown);
-            // 
             // EditControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.guideBox);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.PasteButton);
             this.Controls.Add(this.CopyButton);
@@ -172,19 +156,17 @@
             this.Controls.Add(this.DownButton);
             this.Controls.Add(this.RightButton);
             this.Controls.Add(this.SaveButton);
-            this.Controls.Add(this.characterBox);
+            this.Controls.Add(this.characterPanel);
             this.Location = new System.Drawing.Point(4, 4);
             this.Name = "EditControl";
             this.Size = new System.Drawing.Size(744, 416);
-            ((System.ComponentModel.ISupportInitialize)(this.characterBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.guideBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox characterBox;
+        private System.Windows.Forms.PictureBox characterPanel;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button RightButton;
         private System.Windows.Forms.Button DownButton;
@@ -194,6 +176,5 @@
         private System.Windows.Forms.Button CopyButton;
         private System.Windows.Forms.Button PasteButton;
         private System.Windows.Forms.Button ClearButton;
-        private System.Windows.Forms.PictureBox guideBox;
     }
 }

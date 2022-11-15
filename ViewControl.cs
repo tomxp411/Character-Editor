@@ -8,18 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CharEdit
+namespace CharSet
 {
     public partial class CharViewer : UserControl
     {
-        int CHARSET_COUNT = 256;
+        int CHARSET_SIZE = 4096;
 
         Brush textBrush = null;  //new SolidBrush(SystemColors.WindowText);
         Brush selectedBrush = null;
         Pen pen = null;
         int StartIndex = 0;
         public int BitsPerRow = 8;
-        private int _bytesPerCharacter = 8;
+        public int BytesPerCharacter = 8;
 
         int Columns = 16;
         int Rows = 16;
@@ -41,95 +41,27 @@ namespace CharEdit
             InitializeComponent();
         }
 
-        public Font8bit FontData = new Font8bit(1,256);
+        public byte[] FontData = new byte[8 * 256];
 
         public MouseButtons MouseButton { get; private set; }
 
-        int CHARSET_SIZE
-        {
-            get
-            {
-                return CHARSET_COUNT * BitsPerRow;
-            }
-        }
-
-        public int BytesPerCharacter
-        {
-            get
-            {
-                return this._bytesPerCharacter;
-            }
-
-            set
-            {
-                this._bytesPerCharacter = value;
-                Refresh();
-            }
-        }
-
-        public Font8bit LoadBin(string Filename, int BytesPerCharacter)
+        public byte[] LoadBin(string Filename)
         {
             if (!System.IO.File.Exists(Filename))
-                return null;
+                return new byte[CHARSET_SIZE];
 
-            byte[] data = System.IO.File.ReadAllBytes(Filename);
-
-            int cells = data.Length / BytesPerCharacter;
-            int banks = cells / FontBank.Max;
-
-            Font8bit font = new Font8bit(banks, FontBank.Max);
-            this.BytesPerCharacter = BytesPerCharacter;
-            font.BytesPerCharacter = BytesPerCharacter;
-
-            int b = 0;
-            int bankid = 0;
-            int charid = 0;
-            int i = 0;
-            while(b < data.Length)
-            {
-                while (charid < font.CurrentBank.Count)
-                {
-                    FontCell cell = font[bankid, charid];
-                    //System.Diagnostics.Debug.Write(i);
-                    //System.Diagnostics.Debug.Write(" : ");
-                    for (int row = 0; row < BytesPerCharacter; row++)
-                    {
-                        //System.Diagnostics.Debug.Write(data[b].ToString("x2"));
-                        //System.Diagnostics.Debug.Write(" ");
-                        cell.Data[row] = data[b++];
-                    }
-                    charid++;
-                    //System.Diagnostics.Debug.WriteLine("");
-                    i++;
-                }
-                charid = 0;
-                bankid++;
-            }
-            return font;
+            byte[] data = new byte[CHARSET_SIZE];
+            data = System.IO.File.ReadAllBytes(Filename);
+            return data;
         }
 
-        public void SaveBin(string Filename, Font8bit font)
+        public void SaveBin(string Filename, byte[] data)
         {
-            byte[] data = new byte[font.TotalBytes];
-            int i = 0;
-            for (int b = 0; b < font.Banks.Count; b++)
-            {
-                for (int c = 0; c < font.Banks[b].Count; c++)
-                {
-                    for (int row = 0; row < font.BytesPerCharacter; row++)
-                    {
-                        data[i] = font[c].Data[row];
-                        i++;
-                    }
-                }
-            }
             System.IO.File.WriteAllBytes(Filename, data);
         }
 
         public byte[] LoadPNG(string Filename)
         {
-            throw new NotImplementedException();
-
             if (!System.IO.File.Exists(Filename))
                 return new byte[CHARSET_SIZE];
 
@@ -172,34 +104,9 @@ namespace CharEdit
         // useful for converting BIN to PNG or PNG to BIN
         public void CopyAll()
         {
-            CopyBlock(FontData, 0, 0, CHARSET_COUNT);
+            CopyBlock(FontData, 0, 0, 256);
             Refresh();
         }
-
-        // removed, since each font cell is now a unique entity
-        ///// <summary>
-        ///// converts a character set to the new height. Extra rows are added to or truncated
-        ///// from the bottom. 
-        ///// </summary>
-        ///// <param name="OldHeight"></param>
-        ///// <param name="NewHeight"></param>
-        //internal void ConvertHeight(int OldHeight, int NewHeight)
-        //{
-        //    byte[] newData = new byte[NewHeight * CHARSET_COUNT];
-        //    for (int c = 0; c < CHARSET_COUNT; c++)
-        //    {
-        //        for (int row = 0; row < OldHeight && row < NewHeight; row++)
-        //        {
-        //            int nr = c * NewHeight + row;
-        //            int or = c * OldHeight + row;
-
-        //            newData[nr] = FontData[or];
-        //        }
-        //    }
-
-        //    FontData = newData;
-        //    BytesPerCharacter = NewHeight;
-        //}
 
         public void CopyNonPET()
         {
@@ -239,13 +146,13 @@ namespace CharEdit
 
         internal void Clear()
         {
-            FontData = new Font8bit(1,256); // new byte[CHARSET_SIZE];
+            FontData = new byte[CHARSET_SIZE];
             Refresh();
         }
 
-        private void DrawCharSet(Font8bit font, Graphics g, int StartX, int StartY)
+        private void DrawCharSet(byte[] data, Graphics g, int StartX, int StartY)
         {
-            if (font == null)
+            if (data == null)
                 return;
 
             if (textBrush == null)
@@ -255,7 +162,7 @@ namespace CharEdit
                 pen = new Pen(Color.Gray);
             }
 
-            int characters = font.CurrentBank.Count;
+            int characters = data.Length / BytesPerCharacter;
             int x0 = StartX;
             int x = x0;
             int y0 = StartY;
@@ -306,13 +213,17 @@ namespace CharEdit
 
                 for (int charRow = 0; charRow < BytesPerCharacter; charRow++)
                 {
-                    byte b = font[i].Data[charRow];
-                    for (int bit = 128; bit > 0; bit = bit >> 1)
+                    int pos = i * BytesPerCharacter + charRow;
+                    if (pos < 0 || pos >= data.Length)
+                        return;
+
+                    byte b = data[pos];
+                    for (int bit = 128; bit > 0;)
                     {
                         if ((b & bit) > 0)
                             g.FillRectangle(textBrush, x, y, bitWidth, bitHeight);
                         x += bitWidth;
-                        //bit = bit >> 1;
+                        bit = bit >> 1;
                     }
                     x = x0;
                     y = y + bitHeight;
@@ -359,7 +270,7 @@ namespace CharEdit
             //SaveBin("FOENIX-CHARACTER-ASCII.bin", OutputData);
         }
 
-        private void CopyBlock(Font8bit source, int sourceIndex, int destIndex, int count)
+        private void CopyBlock(byte[] source, int sourceIndex, int destIndex, int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -369,12 +280,11 @@ namespace CharEdit
 
         private void CopyCharacter(int sourceIndex, int destIndex)
         {
-            int sp = sourceIndex;
-            int dp = destIndex;
-
+            int sp = sourceIndex * BytesPerCharacter;
+            int dp = destIndex * BytesPerCharacter;
             for (int i = 0; i < BytesPerCharacter; i++)
             {
-                Array.Copy(FontData[sourceIndex].Data, FontData[destIndex].Data, FontData.BytesPerCharacter);
+                FontData[dp + i] = FontData[sp + i];
             }
         }
 

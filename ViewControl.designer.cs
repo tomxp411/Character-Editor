@@ -1,4 +1,4 @@
-﻿namespace CharEdit
+﻿namespace CharSet
 {
     partial class CharViewer
     {

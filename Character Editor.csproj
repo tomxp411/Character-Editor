@@ -6,11 +6,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{372968C7-3555-4B1D-B4C2-8374FD45F6B5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>CharEdit</RootNamespace>
+    <RootNamespace>Nu64.CharEdit</RootNamespace>
     <AssemblyName>Character Editor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,9 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Font8bit.cs" />
-    <Compile Include="FontBank.cs" />
-    <Compile Include="FontCell.cs" />
     <Compile Include="CharEditMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,10 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="PET-ASCII_8x16.bin">
+    <None Include="CBM-ASCII_8x16.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="PET-ASCII_8x8.bin">
+    <None Include="CBM-ASCII_8x8.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

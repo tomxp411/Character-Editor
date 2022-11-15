@@ -8,25 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CharEdit
+namespace Nu64.CharEdit
 {
     public partial class EditControl : UserControl
     {
-        public const int BytesPerCharacter_Max = 16;
-        public const int BitsPerRow_Max = 8;
-
         byte[] reloadData = null;
         byte[] clipData = null;
-        Font8bit FontData = null;
+        byte[] FontData = new byte[8 * 256];
         byte[] characterData = new byte[16];
-        bool[,] grid = new bool[BitsPerRow_Max, BytesPerCharacter_Max];
-        bool[] guides = new bool[BytesPerCharacter_Max];
-
-        //int SelectedCharacter = 0;
-        int Columns = BitsPerRow_Max;
-        int Rows = BytesPerCharacter_Max;
-        int Banks = 1;
-
+        bool[,] grid = new bool[8, 8];
+        int CharIndex = 0;
+        int Columns = 8;
+        int Rows = 8;
         Color Color0 = Color.Black;
         Color Color1 = Color.LightGreen;
         MouseButtons MouseHeld = MouseButtons.None;
@@ -36,66 +29,35 @@ namespace CharEdit
 
         Brush textBrush = new SolidBrush(Color.LightGreen);
         Pen borderPen = new Pen(Color.DarkGray);
-        private Brush guideBrush = new SolidBrush(Color.FromArgb(64, 64, 64));
-
-        public int BytesPerCharacter
-        {
-            get { return Rows; }
-            set
-            {
-                Rows = value;
-                LoadCharacter();
-            }
-        }
 
         public EditControl()
         {
             InitializeComponent();
         }
 
-        internal void LoadCharacter(Font8bit font, int selectedIndex, int bytesPerCharacter)
+        internal void LoadCharacter(byte[] FontData, int selectedIndex, int bytesPerCharacter)
         {
-            this.FontData = font;
-            FontData.SelectedCharacter = selectedIndex;
+            this.FontData = FontData;
+            this.CharIndex = selectedIndex;
             Rows = bytesPerCharacter;
-            Banks = font.Banks.Count;
 
             LoadCharacter();
         }
 
         private void LoadCharacter()
         {
-            if (FontData == null)
-                return;
-
             characterData = new byte[Rows];
-            grid = new bool[Columns, Rows];
-
-            int pos = SelectedIndex;
-            if (pos < 0 || pos >= FontData.CurrentFont.Count)
+            int pos = CharIndex * Rows;
+            if (pos < 0 || pos >= FontData.Length)
                 return;
-
-            Array.Copy(FontData[SelectedIndex].Data, characterData, FontData.BytesPerCharacter);
-            //for (int i = 0; i < Rows; i++)
-            //{
-            //    characterData[i] = FontData[SelectedCharacter].Data[i];
-            //}
+            for (int i = 0; i < Rows; i++)
+            {
+                characterData[i] = FontData[pos + i];
+            }
             reloadData = new byte[Rows];
             characterData.CopyTo(reloadData, 0);
-
-            int w = characterBox.ClientRectangle.Width / Columns;
-            int margin = characterBox.Width - characterBox.ClientRectangle.Width;
-            characterBox.Height = w * Rows + margin;
-            guideBox.Height = characterBox.Height;
-
-            SetGuides();
-
             LoadPixels();
             Refresh();
-        }
-
-        private void SetGuides()
-        {
         }
 
         private void LoadPixels()
@@ -123,7 +85,7 @@ namespace CharEdit
                 if (i != ColorHeld)
                 {
                     grid[p.X, p.Y] = ColorHeld;
-                    characterBox.Refresh();
+                    characterPanel.Refresh();
                 }
             }
         }
@@ -133,8 +95,8 @@ namespace CharEdit
             Rectangle pixel = new Rectangle(
                 0,
                 0,
-                characterBox.ClientRectangle.Width / Columns,
-                characterBox.ClientRectangle.Height / Rows);
+                characterPanel.ClientRectangle.Width / Columns,
+                characterPanel.ClientRectangle.Height / Rows);
 
             Point p = new Point();
             p.X = location.X / pixel.Width;
@@ -159,7 +121,7 @@ namespace CharEdit
                     return;
                 ColorHeld = !grid[p.X, p.Y];
                 grid[p.X, p.Y] = ColorHeld;
-                characterBox.Refresh();
+                characterPanel.Refresh();
             }
         }
 
@@ -170,7 +132,7 @@ namespace CharEdit
                 return;
 
             if (p.BackColor == Color0)
-                p.BackColor = characterBox.ForeColor;
+                p.BackColor = characterPanel.ForeColor;
             else
                 p.BackColor = Color0;
         }
@@ -184,9 +146,10 @@ namespace CharEdit
         {
             SavePixels();
 
+            int j = CharIndex * Rows;
             for (int i = 0; i < Rows; i++)
             {
-                FontData[SelectedIndex].Data[i] = characterData[i];
+                FontData[j + i] = characterData[i];
             }
 
             CharacterSaved?.Invoke(this, new EventArgs());
@@ -220,7 +183,7 @@ namespace CharEdit
 
         private void Redraw()
         {
-            characterBox.Refresh();
+            characterPanel.Refresh();
             SaveCharacter();
         }
 
@@ -307,13 +270,13 @@ namespace CharEdit
             Redraw();
         }
 
-        private void P_Paint(object sender, PaintEventArgs e)
+        private void characterPanel_Paint(object sender, PaintEventArgs e)
         {
             Rectangle pixel = new Rectangle(
                 0,
                 0,
-                characterBox.ClientRectangle.Width / Columns,
-                characterBox.ClientRectangle.Height / Rows);
+                characterPanel.ClientRectangle.Width / Columns,
+                characterPanel.ClientRectangle.Height / Rows);
 
             for (int y = 0; y < Rows; y++)
             {
@@ -322,62 +285,10 @@ namespace CharEdit
                     pixel.Location = new Point(x * pixel.Width, y * pixel.Height);
                     if (grid[x, y])
                         e.Graphics.FillRectangle(textBrush, pixel);
-                    else if (guides[y])
-                        e.Graphics.FillRectangle(guideBrush, pixel);
-
                     e.Graphics.DrawRectangle(borderPen, pixel);
                 }
             }
 
         }
-
-        private void GuideBox_MouseDown(object sender, MouseEventArgs e)
-        {
-            Point p = GetPixel(e.Location);
-            if (p.X < 0 || p.X >= Columns || p.Y < 0 || p.Y >= Rows)
-                return;
-            int row = p.Y;
-            guides[row] = !guides[row];
-            Refresh();
-        }
-
-        private void guideBox_Paint(object sender, PaintEventArgs e)
-        {
-            Rectangle pixel = new Rectangle(
-                0,
-                0,
-                characterBox.ClientRectangle.Width / Columns,
-                characterBox.ClientRectangle.Height / Rows);
-
-            for (int y = 0; y < Rows; y++)
-            {
-                for (int x = 0; x < Columns; x++)
-                {
-                    pixel.Location = new Point(x * pixel.Width, y * pixel.Height);
-                    if (grid[x, y])
-                        e.Graphics.FillRectangle(textBrush, pixel);
-                    else if (guides[y])
-                        e.Graphics.FillRectangle(guideBrush, pixel);
-
-                    e.Graphics.DrawRectangle(borderPen, pixel);
-                }
-            }
-        }
-
-        public int SelectedIndex
-        {
-            get
-            {
-                return FontData.SelectedCharacter;
-            }
-            set
-            {
-                if (value >= 0 && value < FontData.CurrentFont.Count)
-                {
-                    FontData.SelectedCharacter = value;
-                }
-            }
-        }
-
     }
 }
