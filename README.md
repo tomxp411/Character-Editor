@@ -7,6 +7,10 @@ the low bit is the right pixel.
 
 The editor can handle character cell sizes from 8 to 16 bytes per cell. 
 
+## Building
+
+This requires a recent version of MS Visual Studio. The Community edition will work just fine. You can get it from https://www.visualstudio.com
+
 ## Use
 Before loading a character set, first pull down the combo box at the top (which probably says "8") and change that to the size of the 
 set you want to load. For an 8x8 set, set that to 8. For an 8x12 or 8x16 set, change the vlaue to 12 or 16. If you have this set wrong, 
